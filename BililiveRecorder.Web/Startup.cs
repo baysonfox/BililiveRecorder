@@ -39,6 +39,7 @@ namespace BililiveRecorder.Web
             services.TryAddSingleton<IRecorder>(new FakeRecorderForWeb());
 
             services
+                .AddCors(o => o.AddDefaultPolicy(p => p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()))
                 .AddSingleton<RecorderSchema>()
                 .AddSingleton(typeof(EnumerationGraphType<>))
                 .AddSingleton<IDocumentExecuter, SubscriptionDocumentExecuter>()
@@ -57,6 +58,7 @@ namespace BililiveRecorder.Web
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env) => app
+            .UseCors()
             .UseWebSockets()
             .UseGraphQLWebSockets<RecorderSchema>()
             .UseGraphQL<RecorderSchema>()
